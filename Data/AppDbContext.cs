@@ -190,7 +190,19 @@ namespace Data
                     CreatedDate = new DateTime(2024, 1, 1),
                     Format = PhotoFormat.GIF,
                     AuthorId = 3
+                },
+                new PhotoEntity()
+
+                {
+                    PhotoId = 4,
+                    Camera = "Polaroid",
+                    Description = "Pustynia",
+                    Resolution = "1520x1520",
+                    CreatedDate = new DateTime(2002, 11, 11),
+                    Format = PhotoFormat.PNG,
+                    AuthorId = 2
                 }
+
             );
         }
     }
