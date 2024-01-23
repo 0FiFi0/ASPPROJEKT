@@ -1,0 +1,70 @@
+﻿@model Data.Entities.PhotoEntity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Szczegóły</h1>
+<hr />
+<div>
+    <h4>Zdjęcie</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Aparat
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Camera
+        </dd>
+        <dt class="col-sm-2">
+            Opis
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Description
+        </dd>
+        <dt class="col-sm-2">
+            Rozdzielczość
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Resolution
+        </dd>
+
+        <dt class="col-sm-2">
+            Data stworzenia
+        </dt>
+        <dd class="col-sm-10">
+            @Model.CreatedDate
+        </dd>
+
+        <dt class="col-sm-2">
+            Format 
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Format
+        </dd>
+
+        <dt class="col-sm-2">
+            Imię autora
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Author.Name
+        </dd>
+        <dt class="col-sm-2">
+            Opis autora
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Author.Description
+        </dd>
+        <dt class="col-sm-2">
+            Adres autora
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Author.Address.City, @Model.Author.Address.Street, @Model.Author.Address.PostalCode
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.PhotoId">Edytuj</a>
+    <a class="btn btn-primary" asp-action="PagedIndex">Powrót</a>
+</div>

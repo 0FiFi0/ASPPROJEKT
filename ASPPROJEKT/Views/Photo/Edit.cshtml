@@ -1,0 +1,69 @@
+﻿@model Data.Entities.PhotoEntity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Edytuj zdjęcie</h1>
+
+<hr />
+<div>
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+        <input type="hidden" asp-for="PhotoId" />
+
+        <div class="form-group">
+            <label asp-for="Camera">Aparat</label>
+            <input asp-for="Camera" class="form-control" />
+            <span asp-validation-for="Camera" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Opis</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Resolution">Rozdzielczość</label>
+            <input asp-for="Resolution" class="form-control" />
+            <span asp-validation-for="Resolution" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CreatedDate">Data stworzenia</label>
+            <input asp-for="CreatedDate" class="form-control" />
+            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Format">Format</label>
+            <select asp-for="Format" class="form-control">
+                <option value="JPEG">JPEG</option>
+                <option value="PNG">PNG</option>
+                <option value="GIF">GIF</option>
+            </select>
+            <span asp-validation-for="Format" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AuthorId">Autor</label>
+            <select class="form-control" asp-for="AuthorId">
+                @foreach (var item in ViewBag.AuthorList)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+            <span class="text-danger" asp-validation-for="Author"></span>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <input type="submit" value="Zapisz" class="btn btn-success"/>
+            <a class="btn btn-primary" asp-action="PagedIndex">Powrót</a>
+        </div>
+    </form>
+
+</div>
+

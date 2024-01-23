@@ -1,0 +1,152 @@
+﻿@model PagingList<Data.Entities.PhotoEntity>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Zdjęcia</h1>
+<hr/>
+<div>
+    <form id="filterForm">
+        <a class="btn btn-primary" asp-action="Create">Dodaj nowe zdjęcie</a>
+        <label for="authorFilter">Filtruj według autora: </label>
+        <input type="text" id="authorFilter" name="authorFilter" />
+        <button type="button" onclick="applyFilter()">Filtruj</button>
+        <a class="btn btn-outline-dark" asp-action="PagedIndex">Wyczyść</a>
+    </form>
+</div>
+
+<table class="table" id="photoTable">
+    <thead>
+        <tr>
+            <th>Aparat</th>
+            <th>Opis</th>
+            <th>Rozdzielczość</th>
+            <th>Data stworzenia</th>
+            <th>Format</th>
+            <th>Autor</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var photo in Model.Data)
+        {
+            <tr>
+                <td>@photo.Camera</td>
+                <td>@photo.Description</td>
+                <td>@photo.Resolution</td>
+                <td>@photo.CreatedDate</td>
+                <td>@photo.Format</td>
+                <td>@photo.Author.Name</td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@photo.PhotoId">Szczegóły</a>
+                    <a class="btn btn-outline-success" asp-action="Edit" asp-route-id="@photo.PhotoId">Edytuj</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@photo.PhotoId">Usuń</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav aria-label="Photos page navigation">
+    <ul class="pagination">
+        @if (Model.IsPrevious)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Photo"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page - 1)">
+                    Poprzednia
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Poprzednia</a>
+            </li>
+        }
+
+        <li class="page-item disabled">
+            <span class="page-link">@Model.Page</span>
+        </li>
+
+        @if (Model.IsNext)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-controller="Photo"
+                   asp-action="PagedIndex"
+                   asp-route-page="@(Model.Page + 1)">
+                    Następna
+                </a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Następna</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+@section scripts {
+    <script>
+        function applyFilter() {
+            var authorFilter = document.getElementById("authorFilter").value;
+            var url = `/api/authors/filtered?filter=${authorFilter}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    var photoTable = document.getElementById("photoTable");
+                    var tbody = photoTable.querySelector('tbody');
+                    tbody.innerHTML = "";
+                    console.log(data);
+                    if (data && Array.isArray(data)) {
+                        data.forEach(author => {
+                            if (author.photos && Array.isArray(author.photos)) {
+                                author.photos.forEach(photo => {
+                                    var row = tbody.insertRow();
+                                    row.insertCell(0).textContent = photo.camera;
+                                    row.insertCell(1).textContent = photo.description;
+                                    row.insertCell(2).textContent = photo.resolution;
+                                    var formattedDate = new Date(photo.createdDate).toLocaleString();
+                                    row.insertCell(3).textContent = formattedDate;
+                                    var formatText = mapFormatEnumToString(photo.format);
+                                    row.insertCell(4).textContent = formatText;
+                                    row.insertCell(5).textContent = author.name;
+                                    row.insertCell(6).innerHTML = `
+                                                <a class="btn btn-outline-info" href="/Photo/Details/${photo.photoId}">Szczegóły</a>
+                                                <a class="btn btn-outline-success" href="/Photo/Edit/${photo.photoId}">Edytuj</a>
+                                                <a class="btn btn-outline-danger" href="/Photo/Delete/${photo.photoId}">Usuń</a>`;
+                                });
+                            }
+                        });
+                    } else {
+                        console.error('Błąd podczas przetwarzania danych z AuthorApiController.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Błąd podczas pobierania danych z AuthorApiController:', error);
+                });
+        }
+        function mapFormatEnumToString(formatEnum) {
+            switch (formatEnum) {
+                case 0:
+                    return 'JPEG';
+                case 1:
+                    return 'PNG';
+                case 2:
+                    return 'GIF';
+                default:
+                    return 'Unknown';
+            }
+        }
+    </script>
+}
+
+
