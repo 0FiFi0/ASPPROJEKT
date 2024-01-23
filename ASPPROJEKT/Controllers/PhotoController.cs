@@ -16,14 +16,15 @@ namespace ASPPROJEKT.Controllers
         {
             _photoService = photoService;
         }
-
-        [Authorize(Roles = "user,admin")]
+        
+        [Authorize(Roles = "admin")]
         public IActionResult Index()
         {
             var photos = _photoService.GetAllPhotos();
             return View(photos);
         }
-
+       
+        [Authorize(Roles = "admin")]
         public IActionResult Details(int? id)
         {
 
@@ -37,6 +38,7 @@ namespace ASPPROJEKT.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create()
         {
             var authorList = _photoService.FindAllAuthorsForVieModels();
@@ -45,7 +47,8 @@ namespace ASPPROJEKT.Controllers
             return View();
         }
 
-        [HttpPost]       
+        [HttpPost]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create(PhotoEntity photo)
         {
             if (ModelState.IsValid)

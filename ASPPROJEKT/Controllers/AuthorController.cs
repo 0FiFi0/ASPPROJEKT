@@ -13,7 +13,7 @@ namespace ASPPROJEKT.Controllers
         {
             _authorService = authorService;
         }
-
+        [Authorize(Roles = "user,admin")]
         public IActionResult Index()
         {
             var authors = _authorService.GetAllAuthors();
@@ -33,7 +33,7 @@ namespace ASPPROJEKT.Controllers
             return View(author);
         }
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create()
         {
             var addressList = _authorService.FindAllAddressForVieModels();
@@ -43,7 +43,7 @@ namespace ASPPROJEKT.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create(AuthorEntity author)
         {
             if (ModelState.IsValid)

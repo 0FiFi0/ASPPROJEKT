@@ -13,7 +13,8 @@ namespace ASPPROJEKT.Controllers
         {
             _addressService = addressService;
         }
-
+        
+        [Authorize(Roles = "user,admin")]
         public IActionResult Index()
         {
             var address = _addressService.GetAllAddress();
@@ -21,14 +22,14 @@ namespace ASPPROJEKT.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user,admin")]
         public IActionResult Create(AddressEntity address)
         {
             if (ModelState.IsValid)
